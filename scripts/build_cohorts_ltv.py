@@ -16,11 +16,11 @@ engine = create_engine(
     f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}"
 )
 
-print("🚀 Building cohort retention and LTV analytics...")
+print("Building cohort retention and LTV analytics...")
 
 with engine.begin() as conn:
 
-    # --- 1️⃣ Cohort assignments (each customer's first order month)
+    # --- 1️ Cohort assignments (each customer's first order month)
     conn.execute(text("""
         CREATE OR REPLACE VIEW v_customer_cohort AS
         SELECT
@@ -29,9 +29,9 @@ with engine.begin() as conn:
         FROM fact_orders
         GROUP BY customer_id;
     """))
-    print("✅ v_customer_cohort view created.")
+    print("v_customer_cohort view created.")
 
-    # --- 2️⃣ Monthly activity table (customer orders per month)
+    # --- 2️ Monthly activity table (customer orders per month)
     conn.execute(text("""
         CREATE OR REPLACE VIEW v_customer_activity AS
         SELECT
@@ -42,9 +42,9 @@ with engine.begin() as conn:
         FROM fact_orders o
         GROUP BY o.customer_id, DATE_TRUNC('month', o.order_ts);
     """))
-    print("✅ v_customer_activity view created.")
+    print("v_customer_activity view created.")
 
-    # --- 3️⃣ Retention matrix: how many customers stayed active
+    # --- 3️ Retention matrix: how many customers stayed active
     conn.execute(text("""
         CREATE OR REPLACE VIEW v_retention_matrix AS
         SELECT
@@ -58,9 +58,9 @@ with engine.begin() as conn:
         GROUP BY c.cohort_month, m_offset
         ORDER BY c.cohort_month, m_offset;
     """))
-    print("✅ v_retention_matrix view created.")
+    print("v_retention_matrix view created.")
 
-    # --- 4️⃣ LTV per cohort
+    # --- 4️ LTV per cohort
     conn.execute(text("""
         CREATE OR REPLACE VIEW v_ltv_cohort AS
         SELECT
@@ -74,9 +74,9 @@ with engine.begin() as conn:
         GROUP BY c.cohort_month
         ORDER BY c.cohort_month;
     """))
-    print("✅ v_ltv_cohort view created.")
+    print("v_ltv_cohort view created.")
 
-    # --- 5️⃣ Materialized view for Power BI
+    # --- 5️ Materialized view for Power BI
     conn.execute(text("""
         CREATE MATERIALIZED VIEW IF NOT EXISTS mv_cohort_summary AS
         SELECT
@@ -92,6 +92,6 @@ with engine.begin() as conn:
         ORDER BY cohort_month, m_offset;
     """))
     conn.execute(text("REFRESH MATERIALIZED VIEW mv_cohort_summary;"))
-    print("✅ mv_cohort_summary refreshed.")
+    print("mv_cohort_summary refreshed.")
 
-print("🎯 Cohort and LTV build complete.")
+print("Cohort and LTV build complete.")

@@ -15,4 +15,4 @@ try:
         result = conn.execute(text("SELECT current_database();")).scalar()
         print("✅ Connected to:", result)
 except Exception as e:
-    print("❌ Connection failed:", e)
+    print("Connection failed:", e)

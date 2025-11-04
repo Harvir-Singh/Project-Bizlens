@@ -11,7 +11,7 @@ engine = create_engine(
     f"@{os.getenv('PG_HOST')}:{os.getenv('PG_PORT')}/{os.getenv('PG_DATABASE')}"
 )
 
-print("🚀 Loading dim_product...")
+print("Loading dim_product...")
 
 # Create product dimension from order_items.csv
 try:
@@ -23,8 +23,8 @@ try:
         "category": ["General"] * len(unique_products)
     })
     df_products.to_sql("dim_product", engine, if_exists="append", index=False, method="multi", chunksize=1000)
-    print(f"✅ Loaded {len(df_products)} products into dim_product")
+    print(f"Loaded {len(df_products)} products into dim_product")
 except Exception as e:
-    print("❌ Error loading dim_product:", e)
+    print("Error loading dim_product:", e)
 
-print("🎯 dim_product load complete.")
+print("dim_product load complete.")

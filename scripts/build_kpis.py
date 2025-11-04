@@ -16,7 +16,7 @@ engine = create_engine(
     f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}"
 )
 
-print("🚀 Building KPI views and materialized summaries...")
+print("Building KPI views and materialized summaries...")
 
 with engine.begin() as conn:
 
@@ -35,7 +35,7 @@ with engine.begin() as conn:
         GROUP BY 1
         ORDER BY 1;
     """))
-    print("✅ v_kpi_daily view created.")
+    print("v_kpi_daily view created.")
 
     # --- CAC: join with marketing spend --------------------
     conn.execute(text("""
@@ -56,7 +56,7 @@ with engine.begin() as conn:
         GROUP BY k.day, k.revenue, k.orders, k.customers
         ORDER BY k.day;
     """))
-    print("✅ v_cac_daily view created.")
+    print("v_cac_daily view created.")
 
     # --- LTV by cohort month (optional derived table) ------
     conn.execute(text("""
@@ -68,7 +68,7 @@ with engine.begin() as conn:
         FROM fact_orders o
         GROUP BY 1, o.customer_id;
     """))
-    print("✅ v_ltv_monthly view created.")
+    print("v_ltv_monthly view created.")
 
     # --- Materialized summary for Power BI -----------------
     conn.execute(text("""
@@ -88,6 +88,6 @@ with engine.begin() as conn:
         ORDER BY k.day;
     """))
     conn.execute(text("REFRESH MATERIALIZED VIEW mv_daily_summary;"))
-    print("✅ mv_daily_summary refreshed.")
+    print("mv_daily_summary refreshed.")
 
-print("🎯 KPI build complete.")
+print("KPI build complete.")

@@ -15,7 +15,7 @@ engine = create_engine(
 
 print("🚀 Starting dimension data load...")
 
-# 1️⃣ dim_customer
+# 1️ dim_customer
 try:
     df_customers = pd.read_csv("data/customers.csv")
 
@@ -29,17 +29,17 @@ try:
     df_customers = df_customers[["customer_id", "email_hash", "country", "signup_date"]]
 
     df_customers.to_sql("dim_customer", engine, if_exists="append", index=False, method="multi", chunksize=1000)
-    print(f"✅ Loaded {len(df_customers)} customers into dim_customer")
+    print(f"Loaded {len(df_customers)} customers into dim_customer")
 except Exception as e:
-    print("❌ Error loading customers.csv:", e)
+    print("Error loading customers.csv:", e)
 
-# 2️⃣ dim_channel
+# 2️ dim_channel
 try:
     df_spend = pd.read_csv("data/marketing_spend.csv")
     df_channels = df_spend[["channel_name"]].drop_duplicates()
     df_channels.to_sql("dim_channel", engine, if_exists="append", index=False, method="multi")
-    print(f"✅ Loaded {len(df_channels)} channels into dim_channel")
+    print(f"Loaded {len(df_channels)} channels into dim_channel")
 except Exception as e:
-    print("❌ Error loading marketing_spend.csv:", e)
+    print("Error loading marketing_spend.csv:", e)
 
-print("🎯 Dimension data load complete.")
+print("Dimension data load complete.")

@@ -79,4 +79,4 @@ for d in days:
 marketing = pd.DataFrame(spend, columns=["day","channel_name","spend"])
 marketing.to_csv("data/marketing_spend_large.csv", index=False)
 
-print("✅ Done: Enterprise-scale synthetic data generated.")
+print("Done: Enterprise-scale synthetic data generated.")

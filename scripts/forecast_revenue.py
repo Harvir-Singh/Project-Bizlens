@@ -28,9 +28,9 @@ engine = create_engine(
     f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}"
 )
 
-print(f"🚀 Starting revenue forecasting using {MODEL.upper()} model...")
+print(f"Starting revenue forecasting using {MODEL.upper()} model...")
 
-# -------------------- 1️⃣ Load Historical Data --------------------
+# -------------------- 1️ Load Historical Data --------------------
 with engine.connect() as conn:
     df = pd.read_sql("SELECT day, revenue FROM v_kpi_daily ORDER BY day", conn)
 
@@ -38,13 +38,13 @@ df = df.rename(columns={"day": "ds", "revenue": "y"})
 df["ds"] = pd.to_datetime(df["ds"])
 df = df[df["y"].notnull()]
 
-print(f"✅ Loaded {len(df)} days of historical revenue data.")
+print(f"Loaded {len(df)} days of historical revenue data.")
 
-# -------------------- 2️⃣ Train/Test Split --------------------
+# -------------------- 2️ Train/Test Split --------------------
 train = df.iloc[:-14]
 test = df.iloc[-14:]
 
-# -------------------- 3️⃣ Fit Model --------------------
+# -------------------- 3️ Fit Model --------------------
 if MODEL == "prophet":
     model = Prophet(
         yearly_seasonality=True,
@@ -67,26 +67,26 @@ else:
         "yhat_upper": pred.conf_int()["upper y"]
     })
 
-# -------------------- 4️⃣ Evaluate Backtest --------------------
+# -------------------- 4️ Evaluate Backtest --------------------
 try:
     preds = forecast.set_index("ds").join(test.set_index("ds"), how="inner")
     mape = mean_absolute_percentage_error(preds["y"], preds["yhat"])
     smape = 100 * np.mean(2 * np.abs(preds["yhat"] - preds["y"]) / (np.abs(preds["yhat"]) + np.abs(preds["y"])))
-    print(f"📊 Backtest — MAPE: {mape:.3f}, SMAPE: {smape:.3f}")
+    print(f"Backtest — MAPE: {mape:.3f}, SMAPE: {smape:.3f}")
 except Exception:
     mape = None
     smape = None
 
-# -------------------- 5️⃣ Write Forecast to Database --------------------
+# -------------------- 5️ Write Forecast to Database --------------------
 forecast["mape"] = mape
 forecast["smape"] = smape
 
 with engine.begin() as conn:
     conn.execute(text("DROP TABLE IF EXISTS forecast_daily;"))
     forecast.to_sql("forecast_daily", conn, if_exists="replace", index=False)
-print(f"✅ Forecast written to forecast_daily ({len(forecast)} rows).")
+print(f"Forecast written to forecast_daily ({len(forecast)} rows).")
 
-# -------------------- 6️⃣ Quick Plot --------------------
+# -------------------- 6️ Quick Plot --------------------
 try:
     import matplotlib.pyplot as plt
     plt.figure(figsize=(10, 5))
@@ -98,6 +98,6 @@ try:
     plt.tight_layout()
     plt.show()
 except Exception as e:
-    print("⚠️ Plot skipped:", e)
+    print("Plot skipped:", e)
 
 print("Forecast generation complete.")
