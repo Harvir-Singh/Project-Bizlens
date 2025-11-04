@@ -1,0 +1,40 @@
+{
+  "name": "BizLens Executive Theme",
+  "dataColors": [
+    "#008080", "#0E7490", "#10B981", "#F59E0B", "#EF4444",
+    "#6366F1", "#9333EA", "#3B82F6", "#F43F5E", "#14B8A6"
+  ],
+  "background": "#F9FAFB",
+  "foreground": "#111827",
+  "tableAccent": "#0E7490",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [{ "show": false }],
+        "titleText": [{ "fontSize": 12, "fontFamily": "Segoe UI Semibold", "color": "#111827" }],
+        "labelText": [{ "fontFamily": "Segoe UI", "color": "#374151" }],
+        "header": [{ "fontFamily": "Segoe UI Semibold" }],
+        "grid": [{ "color": "#E5E7EB" }]
+      }
+    },
+    "card": {
+      "*": {
+        "color": [{ "solid": { "color": "#111827" } }],
+        "background": [{ "solid": { "color": "#FFFFFF" } }],
+        "border": [{ "radius": 8 }]
+      }
+    },
+    "slicer": {
+      "*": {
+        "background": [{ "solid": { "color": "#FFFFFF" } }],
+        "border": [{ "radius": 8 }],
+        "fontColor": [{ "color": "#111827" }]
+      }
+    }
+  },
+  "textClasses": {
+    "title": { "fontSize": 14, "fontWeight": "600" },
+    "header": { "fontSize": 12, "fontWeight": "500" },
+    "body": { "fontSize": 10 }
+  }
+}

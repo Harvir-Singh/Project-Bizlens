@@ -1,0 +1,21 @@
+# Core
+pandas>=2.2.0
+numpy>=1.26.0
+python-dotenv>=1.0.1
+
+# Database
+SQLAlchemy>=2.0.29
+psycopg2-binary>=2.9.9
+
+# Time Series & Forecasting
+prophet>=1.1.5
+statsmodels>=0.14.1
+scikit-learn>=1.4.0
+
+# Visualization / Charts
+matplotlib>=3.8.0
+plotly>=5.22.0
+
+# Dashboard / App Layer
+streamlit>=1.38.0
+fastapi>=0.111.0
